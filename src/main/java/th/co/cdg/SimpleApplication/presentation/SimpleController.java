@@ -2,7 +2,6 @@ package th.co.cdg.SimpleApplication.presentation;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 public class SimpleController {
