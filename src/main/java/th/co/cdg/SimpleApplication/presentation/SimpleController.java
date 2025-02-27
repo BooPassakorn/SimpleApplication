@@ -24,8 +24,8 @@ public class SimpleController {
     // ---- #5 Response Body ---- //
     // Hello (name) !!!.
 
-    @GetMapping(value = "hello-with-your-name")
-    public ResponseEntity<String> getHelloWorld(@RequestParam(name = "name", defaultValue = "world") String name) { //required = false จะส่งก็ได้ไม่ส่งก็ได้ ถ้าเป็น true ถ้าไม่ส่งจะเกิดเคส 400
+    @GetMapping(value = "hello-with-your-name/{name}")
+    public ResponseEntity<String> getHelloWorld(@PathVariable(name = "name") String name) { //required = false จะส่งก็ได้ไม่ส่งก็ได้ ถ้าเป็น true ถ้าไม่ส่งจะเกิดเคส 400
         return ResponseEntity
                 .ok()
                 .body("Hello " + name + " !!!");
