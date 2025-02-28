@@ -57,16 +57,36 @@ public class SimpleController {
 
     @PostMapping(value = "user")
     public ResponseEntity<String> addUserController(@RequestBody User user) {
-        boolean isUserExist = users.stream().anyMatch(existUser -> existUser.getId().equals(user.getId()));
-        if (isUserExist) {
+        if (areUserExist(user.getId())) {
             return ResponseEntity
                     .badRequest()
                     .body("user already exist");
         }else{
             users.add(user);
+            return ResponseEntity
+                    .ok()
+                    .body("add user successfully");
         }
-        return ResponseEntity
-                .ok()
-                .body("add user successfully");
     }
+
+    @DeleteMapping(value = "user/{id}")
+    public ResponseEntity<String> deleteUserController(@PathVariable(name = "id") long id) {
+        if (areUserExist(id)) {
+            users.removeIf(user -> user.getId().equals(id));
+            return ResponseEntity
+                    .ok()
+                    .body("delete user successfully");
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body("user does not exist");
+        }
+    }
+
+    private boolean areUserExist(Long id) {
+        return users
+                .stream()
+                .anyMatch(existedUser -> id.equals(existedUser.getId()));
+    }
+
 }
