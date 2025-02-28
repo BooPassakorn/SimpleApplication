@@ -42,10 +42,18 @@ public class SimpleController {
     }
 
     // ---- Service สำหรับ User ทั้งหมด ---- //
-    @GetMapping(value = "get-users")
+    @GetMapping(value = "users")
     public ResponseEntity<List<User>> getAllUserService() {
         return ResponseEntity
                 .ok()
                 .body(users);
+    }
+
+    @PostMapping(value = "user")
+    public ResponseEntity<String> addUserController(@RequestBody User user) {
+        users.add(user);
+        return ResponseEntity
+                .ok()
+                .body("add user successfully");
     }
 }
