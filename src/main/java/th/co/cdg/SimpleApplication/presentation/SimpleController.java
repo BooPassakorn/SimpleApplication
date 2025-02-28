@@ -2,6 +2,7 @@ package th.co.cdg.SimpleApplication.presentation;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import th.co.cdg.SimpleApplication.model.User;
 
 @RestController
 public class SimpleController {
@@ -26,6 +27,13 @@ public class SimpleController {
         return ResponseEntity
                 .ok() // #4
                 .body("Hello " + name + " !!!"); // #5
+    }
+
+    @PostMapping(value = "hello-with-body")
+    public ResponseEntity<String> getHelloWorld(@RequestBody User user) {
+        return ResponseEntity
+                .ok()
+                .body("Hello " + user.getName() + " !!!");
     }
 
 }
