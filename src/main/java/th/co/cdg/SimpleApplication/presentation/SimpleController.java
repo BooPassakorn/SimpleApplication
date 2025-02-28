@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import th.co.cdg.SimpleApplication.model.User;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -45,6 +46,7 @@ public class SimpleController {
     @GetMapping(value = "users")
     public ResponseEntity<List<User>> getAllUserController() {
         if (!users.isEmpty()) {
+            users.sort(Comparator.comparing(User::getId)); //เรียงข้อมูลจาก Id จากน้อยไปมาก
             return ResponseEntity
                     .ok()
                     .body(users);
