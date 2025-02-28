@@ -43,7 +43,7 @@ public class SimpleController {
 
     // ---- Service สำหรับ User ทั้งหมด ---- //
     @GetMapping(value = "users")
-    public ResponseEntity<List<User>> getAllUserService() {
+    public ResponseEntity<List<User>> getAllUserController() {
         return ResponseEntity
                 .ok()
                 .body(users);
