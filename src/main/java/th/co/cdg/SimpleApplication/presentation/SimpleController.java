@@ -69,6 +69,40 @@ public class SimpleController {
         }
     }
 
+    @PutMapping(value = "user")
+    public ResponseEntity<String> updateUserController(@RequestBody User user) {
+
+        if (null == user.getId()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Cannot update user: field 'id' is missing.");
+        }
+
+        User queryUser = users
+                .stream()
+                .filter(existedUser -> user.getId().equals(existedUser.getId()))
+                .findAny()
+                .orElse(null);
+        if (null == queryUser) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Cannot update user: User does not exist.");
+        }
+
+        if (null != user.getName()) queryUser.setName(user.getName()); //short if
+
+        if (null != user.getTel()) {
+            queryUser.setTel(user.getTel());
+        }
+
+        deleteUser(user);
+        addUser(queryUser);
+
+        return ResponseEntity
+                .ok()
+                .body("Update user successfully.");
+    }
+
     @DeleteMapping(value = "user/{id}")
     public ResponseEntity<String> deleteUserController(@PathVariable(name = "id") long id) {
         if (areUserExist(id)) {
@@ -87,6 +121,14 @@ public class SimpleController {
         return users
                 .stream()
                 .anyMatch(existedUser -> id.equals(existedUser.getId()));
+    }
+
+    private void deleteUser(User user) {
+        users.removeIf(existedUser -> user.getId().equals(existedUser.getId()));
+    }
+
+    private void addUser(User user) {
+        users.add(user);
     }
 
 }
