@@ -4,6 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import th.co.cdg.SimpleApplication.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class SimpleController {
 
@@ -22,6 +25,8 @@ public class SimpleController {
     // ---- #5 Response Body ---- //
     // Hello boo !!!
 
+    private List<User> users = new ArrayList<>();
+
     @GetMapping(value = "hello-with-your-name") // #1 // #2
     public ResponseEntity<String> getHelloWorld(@RequestParam(name = "name") String name) { // #3 //required = false จะส่งก็ได้ไม่ส่งก็ได้ ถ้าเป็น true ถ้าไม่ส่งจะเกิดเคส 400
         return ResponseEntity
@@ -29,11 +34,18 @@ public class SimpleController {
                 .body("Hello " + name + " !!!"); // #5
     }
 
-    @PostMapping(value = "hello-with-body")
+    @PostMapping(value = "hello-with-body") //consume = incoming(ขาเข้า), produces = outgoing(ขาออก)
     public ResponseEntity<String> getHelloWorld(@RequestBody User user) {
         return ResponseEntity
                 .ok()
                 .body("Hello " + user.getName() + " !!!");
     }
 
+    // ---- Service สำหรับ User ทั้งหมด ---- //
+    @GetMapping(value = "get-users")
+    public ResponseEntity<List<User>> getAllUserService() {
+        return ResponseEntity
+                .ok()
+                .body(users);
+    }
 }
