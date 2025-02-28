@@ -44,14 +44,27 @@ public class SimpleController {
     // ---- Service สำหรับ User ทั้งหมด ---- //
     @GetMapping(value = "users")
     public ResponseEntity<List<User>> getAllUserController() {
-        return ResponseEntity
-                .ok()
-                .body(users);
+        if (!users.isEmpty()) {
+            return ResponseEntity
+                    .ok()
+                    .body(users);
+        } else {
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        }
     }
 
     @PostMapping(value = "user")
     public ResponseEntity<String> addUserController(@RequestBody User user) {
-        users.add(user);
+        boolean isUserExist = users.stream().anyMatch(existUser -> existUser.getId().equals(user.getId()));
+        if (isUserExist) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("user already exist");
+        }else{
+            users.add(user);
+        }
         return ResponseEntity
                 .ok()
                 .body("add user successfully");
