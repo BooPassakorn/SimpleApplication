@@ -70,6 +70,19 @@ public class UserRepository {
         // Return effected row in table
         return query.executeUpdate();
     }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+        public int deleteUserById(Long id){
+
+        String sql = " DELETE FROM USER " +
+                " WHERE ID = :id ";
+
+        Query query = entityManager.createNativeQuery(sql);
+
+        query.setParameter("id", id);
+
+        return query.executeUpdate();
+    }
 }
 
 

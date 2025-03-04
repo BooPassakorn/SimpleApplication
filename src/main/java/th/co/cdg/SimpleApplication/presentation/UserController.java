@@ -24,16 +24,38 @@ public class UserController {
 
     @PostMapping(value = "add-user")
     public ResponseEntity<String> addUserController (@RequestBody User user) {
-        int result = userRepository.insertNewUser(user);
+        try {
+            int result = userRepository.insertNewUser(user);
+
+            if (result != 0) {
+                return ResponseEntity
+                        .ok()
+                        .body("Add new user successfully");
+            } else {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Cannot add new user");
+            }
+        } catch (Exception e) {
+            return ResponseEntity
+                    .internalServerError()
+                    .body("Cannot add new user cause SQL problem.");
+        }
+    }
+
+    @DeleteMapping(value = "delete-user/{id}")
+    public ResponseEntity<String> deleteUserByIdController (@PathVariable(name = "id") Long id) {
+        int result = userRepository.deleteUserById(id);
 
         if (result != 0) {
             return ResponseEntity
                     .ok()
-                    .body("Add new user successfully");
+                    .body("Delete user successfully");
         } else {
             return ResponseEntity
                     .badRequest()
-                    .body("Cannot add new user");
+                    .body("Cannot delete user");
         }
+
     }
 }
