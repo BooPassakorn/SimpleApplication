@@ -49,6 +49,27 @@ public class UserRepository {
         // Return Result
         return users;
     }
+
+    // Transactional : REQUIRED >> สำหรับการทำ INSERT, UPDATE, DELETE หรือ การแก้ไขข้อมูลของ Database
+    @Transactional(Transactional.TxType.REQUIRED)
+    public int insertNewUser(User user){
+
+        // String SQL
+        String sql = " INSERT INTO USER " +
+                " VALUES(:id, :name, :surname, :age) " ;
+
+        // Execute SQL
+        Query query = entityManager.createNativeQuery(sql);
+
+        // Set parameter on SQL
+        query.setParameter("id", user.getId());
+        query.setParameter("name", user.getName());
+        query.setParameter("surname", user.getSurname());
+        query.setParameter("age", user.getAge());
+
+        // Return effected row in table
+        return query.executeUpdate();
+    }
 }
 
 
