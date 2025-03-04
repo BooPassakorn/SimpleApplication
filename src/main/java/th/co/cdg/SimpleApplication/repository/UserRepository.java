@@ -2,9 +2,12 @@ package th.co.cdg.SimpleApplication.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import th.co.cdg.SimpleApplication.model.User;
+
+import java.util.ArrayList;
 
 @Repository
 public class UserRepository {
@@ -12,9 +15,39 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(value =  Transactional.TxType.SUPPORTS)
-    public User save(User user) {
-        return null;
+    @Transactional(Transactional.TxType.SUPPORTS) //
+    public ArrayList<User> queryAllUser(){
+
+        // String SQL
+        String sql = " SELECT * " +
+                " FROM USER " ;
+
+//        StringBuilder sql2 = new StringBuilder();
+//        sql2.append(" SELECT * ");
+//        sql2.append(" FROM USER ");
+//        entityManager.createNativeQuery(sql2.toString());
+
+        // Query
+        Query query = entityManager.createNativeQuery(sql);
+
+        // Get Result List
+        ArrayList<Object[]> resultList = (ArrayList<Object[]>) query.getResultList();
+
+        // New Return Value
+        ArrayList<User> users = new ArrayList<>();
+
+        // Put Result from DB into Object Ex.{1, Boo1, BooBoo, 21}
+        resultList.forEach(result -> {
+           User user = new User();
+           user.setId(((Integer) result[0]).longValue());
+           user.setName((String) result[1]);
+           user.setSurname((String) result[2]);
+           user.setAge(((Integer) result[3]).longValue());
+            users.add(user);
+        });
+
+        // Return Result
+        return users;
     }
 }
 

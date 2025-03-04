@@ -9,6 +9,6 @@ import th.co.cdg.SimpleApplication.repository.UserRepository;
 @RequestMapping("/api/v1/")
 public class UserController {
 
-    @Autowired
+    @Autowired // ทำ constructor ของ UserRepository
     UserRepository userRepository;
 }
