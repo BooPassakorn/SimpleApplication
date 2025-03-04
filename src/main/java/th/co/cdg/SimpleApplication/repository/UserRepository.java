@@ -77,11 +77,17 @@ public class UserRepository {
         String sql = " UPDATE USER SET ";
 
         if (null != user.getName()) {
-            sql += " NAME = :name ,";
+            sql += " NAME = :name ";
+            if (null != user.getSurname() || null != user.getAge()) {
+                sql += " , ";
+            }
         }
 
         if (null != user.getSurname()) {
-            sql += " SURNAME = :surname ,";
+            sql += " SURNAME = :surname ";
+            if (null != user.getAge()) {
+                sql += " , ";
+            }
         }
 
         if (null != user.getAge()) {
