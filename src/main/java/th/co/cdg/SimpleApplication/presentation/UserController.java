@@ -43,6 +43,21 @@ public class UserController {
         }
     }
 
+    @PutMapping(value = "update-user")
+    public ResponseEntity<String> updateUserByIdController (@RequestBody User user) {
+        int result = userRepository.updateUserById(user);
+
+        if (result != 0) {
+            return ResponseEntity
+                    .ok()
+                    .body("Update user successfully");
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Cannot update user");
+        }
+    }
+
     @DeleteMapping(value = "delete-user/{id}")
     public ResponseEntity<String> deleteUserByIdController (@PathVariable(name = "id") Long id) {
         int result = userRepository.deleteUserById(id);

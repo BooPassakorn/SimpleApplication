@@ -72,6 +72,44 @@ public class UserRepository {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
+    public int updateUserById(User user){
+
+        String sql = " UPDATE USER SET ";
+
+        if (null != user.getName()) {
+            sql += " NAME = :name ,";
+        }
+
+        if (null != user.getSurname()) {
+            sql += " SURNAME = :surname ,";
+        }
+
+        if (null != user.getAge()) {
+            sql += " AGE = :age ";
+        }
+
+        sql += " WHERE ID = :id ";
+
+        Query query = entityManager.createNativeQuery(sql);
+
+        query.setParameter("id", user.getId());
+
+        if (null != user.getName()) {
+            query.setParameter("name", user.getName());
+        }
+
+        if (null != user.getSurname()) {
+            query.setParameter("surname", user.getSurname());
+        }
+
+        if (null != user.getAge()) {
+            query.setParameter("age", user.getAge());
+        }
+
+        return query.executeUpdate();
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
         public int deleteUserById(Long id){
 
         String sql = " DELETE FROM USER " +
@@ -83,6 +121,7 @@ public class UserRepository {
 
         return query.executeUpdate();
     }
+
 }
 
 
