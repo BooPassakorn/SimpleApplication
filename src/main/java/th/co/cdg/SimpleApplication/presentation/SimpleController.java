@@ -93,9 +93,11 @@ public class SimpleController {
 
         if (null != user.getName()) queryUser.setName(user.getName()); //short if
 
-        if (null != user.getTel()) {
-            queryUser.setTel(user.getTel());
+        if (null != user.getSurname()) {
+            queryUser.setSurname(user.getSurname());
         }
+
+        if (null != user.getAge()) queryUser.setAge(user.getAge());
 
         deleteUser(user);
         addUser(queryUser);
