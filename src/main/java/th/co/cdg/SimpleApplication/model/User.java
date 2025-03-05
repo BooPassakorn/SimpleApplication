@@ -6,6 +6,7 @@ public class User {
     private String name;
     private String surname;
     private Long age;
+    private byte[] image;
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class User {
 
     public void setAge(Long age) {
         this.age = age;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

@@ -1,6 +1,7 @@
 package th.co.cdg.SimpleApplication.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -43,7 +44,8 @@ public class UserRepository {
            user.setName((String) result[1]);
            user.setSurname((String) result[2]);
            user.setAge(((Integer) result[3]).longValue());
-            users.add(user);
+           user.setImage((byte[]) result[4]);
+           users.add(user);
         });
 
         // Return Result
@@ -56,7 +58,7 @@ public class UserRepository {
 
         // String SQL
         String sql = " INSERT INTO USER " +
-                " VALUES(:id, :name, :surname, :age) " ;
+                " VALUES(:id, :name, :surname, :age, :image) " ;
 
         // Execute SQL
         Query query = entityManager.createNativeQuery(sql);
@@ -66,6 +68,7 @@ public class UserRepository {
         query.setParameter("name", user.getName());
         query.setParameter("surname", user.getSurname());
         query.setParameter("age", user.getAge());
+        query.setParameter("image", user.getImage());
 
         // Return effected row in table
         return query.executeUpdate();
@@ -78,20 +81,27 @@ public class UserRepository {
 
         if (null != user.getName()) {
             sql += " NAME = :name ";
-            if (null != user.getSurname() || null != user.getAge()) {
+            if (null != user.getSurname() || null != user.getAge() || null != user.getImage()) {
                 sql += " , ";
             }
         }
 
         if (null != user.getSurname()) {
             sql += " SURNAME = :surname ";
-            if (null != user.getAge()) {
+            if (null != user.getAge() || null != user.getImage()) {
                 sql += " , ";
             }
         }
 
         if (null != user.getAge()) {
             sql += " AGE = :age ";
+            if (null != user.getImage()) {
+                sql += " , ";
+            }
+        }
+
+        if (null != user.getImage()) {
+            sql += " IMAGE = :image ";
         }
 
         sql += " WHERE ID = :id ";
@@ -112,6 +122,10 @@ public class UserRepository {
             query.setParameter("age", user.getAge());
         }
 
+        if (null != user.getImage()) {
+            query.setParameter("image", user.getImage());
+        }
+
         return query.executeUpdate();
     }
 
@@ -126,6 +140,23 @@ public class UserRepository {
         query.setParameter("id", id);
 
         return query.executeUpdate();
+    }
+
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public byte[] getImageById(Long id){
+
+        String sql = " SELECT IMAGE FROM USER " +
+                " WHERE ID = :id ";
+
+        Query query = entityManager.createNativeQuery(sql);
+
+        query.setParameter("id", id);
+
+        try {
+            return (byte[]) query.getSingleResult();
+        } catch (NoResultException noResultException) {
+            return null;
+        }
     }
 
 }
